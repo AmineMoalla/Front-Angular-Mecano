@@ -1,0 +1,77 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-md-12 d-flex justify-content-end">
+          <button class="btn btn-danger" (click)="openModal()">Ajouter un employé</button>
+        </div>
+      </div>
+  
+      <!-- Table des employés -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-danger">
+              <h4 class="card-title">Liste des Employés</h4>
+              <p class="card-category">Voici la liste actuelle</p>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="text-primary">
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Poste</th>
+                    <th>Salaire</th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let employe of employes">
+                      <td>{{ employe.id }}</td>
+                      <td>{{ employe.nom }}</td>
+                      <td>{{ employe.prenom }}</td>
+                      <td>{{ employe.poste }}</td>
+                      <td class="text-primary">{{ employe.salaire | currency }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- MODALE -->
+      <div class="modal" tabindex="-1" [ngClass]="{ 'd-block': showModal }" style="background: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title">Ajouter un Employé</h5>
+              <button type="button" class="btn-close" (click)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+              <form (ngSubmit)="ajouterEmploye()" #form="ngForm">
+                <div class="mb-3">
+                  <label>Nom</label>
+                  <input type="text" class="form-control" required [(ngModel)]="nouvelEmploye.nom" name="nom">
+                </div>
+                <div class="mb-3">
+                  <label>Prénom</label>
+                  <input type="text" class="form-control" required [(ngModel)]="nouvelEmploye.prenom" name="prenom">
+                </div>
+                <div class="mb-3">
+                  <label>Poste</label>
+                  <input type="text" class="form-control" required [(ngModel)]="nouvelEmploye.poste" name="poste">
+                </div>
+                <div class="mb-3">
+                  <label>Salaire</label>
+                  <input type="number" class="form-control" required [(ngModel)]="nouvelEmploye.salaire" name="salaire">
+                </div>
+                <button type="submit" class="btn btn-danger" [disabled]="form.invalid">Ajouter</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,82 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-md-12 d-flex justify-content-end">
+          <button class="btn btn-danger" (click)="openModal()">Ajouter un client</button>
+        </div>
+      </div>
+  
+      <!-- Table des clients -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-danger">
+              <h4 class="card-title">Liste des Clients</h4>
+              <p class="card-category">Voici la liste actuelle</p>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="text-primary">
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let client of clients">
+                      <td>{{ client.id }}</td>
+                      <td>{{ client.nom }}</td>
+                      <td>{{ client.prenom }}</td>
+                      <td>{{ client.email }}</td>
+                      <td>
+                        <button class="edit-button mat-button" aria-label="Modifier" (click)="ouvrirModalModification(client)">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button class="delete-button mat-button" aria-label="Supprimer" (click)="supprimerClient(client.id)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- MODALE -->
+      <div class="modal" tabindex="-1" [ngClass]="{ 'd-block': showModal }" style="background: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title">{{ clientSelectionne.id ? 'Modifier' : 'Ajouter' }} un Client</h5>
+              <button type="button" class="btn-close" (click)="fermerModal()"></button>
+            </div>
+            <div class="modal-body">
+              <form (ngSubmit)="soumettreClient()" #form="ngForm">
+                <div class="mb-3">
+                  <label>Nom</label>
+                  <input type="text" class="form-control" required [(ngModel)]="clientSelectionne.nom" name="nom">
+                </div>
+                <div class="mb-3">
+                  <label>Prénom</label>
+                  <input type="text" class="form-control" required [(ngModel)]="clientSelectionne.prenom" name="prenom">
+                </div>
+                <div class="mb-3">
+                  <label>Email</label>
+                  <input type="email" class="form-control" required [(ngModel)]="clientSelectionne.email" name="email">
+                </div>
+                <button type="submit" class="btn btn-danger" [disabled]="form.invalid">
+                  {{ clientSelectionne.id ? 'Mettre à jour' : 'Ajouter' }}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

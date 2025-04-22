@@ -1,0 +1,90 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-md-12 d-flex justify-content-end">
+          <button class="btn btn-danger" (click)="openModal()">Ajouter une pièce</button>
+        </div>
+      </div>
+      
+
+
+  
+      <!-- Table des pièces -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-danger">
+              <h4 class="card-title">Liste des Pièces</h4>
+              <p class="card-category">Voici la liste actuelle</p>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="text-primary">
+                    <tr>
+                      <th>ID</th>
+                      <th>Nom</th>
+                      <th>Prix</th>
+                      <th>Réparation ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let piece of pieces">
+                      <td>{{ piece.id }}</td>
+                      <td>{{ piece.nom }}</td>
+                      <td>{{ piece.prix | currency }}</td>
+                      <td>{{ piece.reparationId }}</td>
+                      <td>
+                        <!-- <button (click)="ouvrirModalModification(piece)">
+                          <i class="bi bi-pencil-square"></i>
+                        </button> -->
+
+                        <button class="edit-button mat-button" aria-label="Modifier">
+                          <mat-icon aria-hidden="false" fontIcon="edit" (click)="ouvrirModalModification(piece)"></mat-icon>
+                        </button>
+                        
+                        <button class="delete-button mat-button" aria-label="Supprimer" (click)="supprimerPiece(piece.id)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                        
+                        
+                        
+                        <!-- <button class="btn btn-sm btn-danger" (click)="supprimerPiece(piece.id)">Supprimer</button> -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- MODALE -->
+      <!-- MODALE -->
+<div class="modal" tabindex="-1" [ngClass]="{ 'd-block': showModal }" style="background: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">{{ pieceSelectionnee?.id ? 'Modifier' : 'Ajouter' }} une Pièce</h5>
+        <button type="button" class="btn-close" (click)="fermerModal()"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="soumettrePiece()" #form="ngForm">
+          <div class="mb-3">
+            <label>Nom</label>
+            <input type="text" class="form-control" required [(ngModel)]="pieceSelectionnee.nom" name="nom">
+          </div>
+          <div class="mb-3">
+            <label>Prix</label>
+            <input type="number" class="form-control" required [(ngModel)]="pieceSelectionnee.prix" name="prix">
+          </div>
+          <button type="submit" class="btn btn-danger" [disabled]="form.invalid">
+            {{ pieceSelectionnee?.id ? 'Modifier' : 'Ajouter' }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

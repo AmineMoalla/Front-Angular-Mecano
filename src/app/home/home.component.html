@@ -1,0 +1,25 @@
+<app-navbar></app-navbar>
+<section class="hero-section" style="position: relative; height: 100vh; overflow: hidden;">
+  
+    <img src="/assets/img/mecanicien.avif" 
+         alt="Background" 
+         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;" />
+  
+    <div class="hero-overlay" 
+         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.4); z-index: 1;">
+    </div>
+  
+    <div class="hero-content" style="position: relative; z-index: 2; text-align: center; color: white; padding-top: 20vh;">
+      <div class="logo-container">
+        <span class="logo-icon">Mecano</span>
+      </div>
+      <h2 class="hero-subtitle">Votre Guide</h2>
+  
+      <div class="search-container">
+        <button mat-raised-button class="explore-btn" routerLink="/hotels">
+           <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+  </section>
+  

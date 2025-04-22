@@ -1,0 +1,100 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-md-12 d-flex justify-content-end">
+          <button class="btn btn-danger" (click)="openModal()">Ajouter une réparation</button>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-danger">
+              <h4 class="card-title">Liste des Réparations</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="text-primary">
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Coût</th>
+                    <th>Voiture</th>
+                    <th>Technicien</th>
+                    <th>Pièce(s)</th>
+                    <th>Actions</th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let rep of reparations">
+                      <td>{{ rep.id }}</td>
+                      <td>{{ rep.date }}</td>
+                      <td>{{ rep.cout | currency }}</td>
+                      <td>{{ rep.voiture?.marque }} {{ rep.voiture?.modele }}</td>
+                      <td>{{ rep.technicien?.nom }} {{ rep.technicien?.prenom }}</td>
+                      <td>
+                        <ul *ngIf="rep.pieces && rep.pieces.length > 0">
+                          <li *ngFor="let piece of rep.pieces">{{ piece.nom }}</li>
+                        </ul>
+                        <span *ngIf="!rep.pieces || rep.pieces.length === 0">Aucune pièce</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-sm btn-warning" (click)="ouvrirModalModification(rep)">Modifier</button>
+                        <button class="btn btn-sm btn-danger" (click)="supprimerReparation(rep.id)">Supprimer</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- MODALE -->
+      <div class="modal" tabindex="-1" [ngClass]="{ 'd-block': showModal }" style="background: rgba(0, 0, 0, 0.5);">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title">Réparation</h5>
+              <button type="button" class="btn-close" (click)="fermerModal()"></button>
+            </div>
+            <div class="modal-body">
+              <form (ngSubmit)="soumettreReparation()" #form="ngForm">
+                <div class="mb-3">
+                  <label>Date</label>
+                  <input type="date" class="form-control" required [(ngModel)]="reparationSelectionnee.date" name="date">
+                </div>
+                <div class="mb-3">
+                  <label>Coût</label>
+                  <input type="number" class="form-control" required [(ngModel)]="reparationSelectionnee.cout" name="cout">
+                </div>
+                <div class="mb-3">
+                  <label>Voiture</label>
+                  <select class="form-control" required [(ngModel)]="reparationSelectionnee.voiture_id" name="voiture_id">
+                    <option *ngFor="let v of voitures" [value]="v.id">{{ v.marque }} {{ v.modele }}</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label>Technicien</label>
+                  <select class="form-control" required [(ngModel)]="reparationSelectionnee.technicien_id" name="technicien_id">
+                    <option *ngFor="let tech of techniciens" [value]="tech.id">{{ tech.nom }} {{ tech.prenom }}</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label>Pièce détachée (facultatif)</label>
+                  <select class="form-control" [(ngModel)]="reparationSelectionnee.piece_id" name="piece_id">
+                    <option [value]="null">Aucune</option>
+                    <option *ngFor="let p of pieces" [value]="p.id">{{ p.nom }}</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-danger" [disabled]="form.invalid">
+                  {{ reparationSelectionnee.id ? 'Mettre à jour' : 'Ajouter' }}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
