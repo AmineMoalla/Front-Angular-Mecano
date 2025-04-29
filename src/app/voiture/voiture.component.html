@@ -1,94 +1,122 @@
 <div class="main-content">
-    <div class="container-fluid">
-      <div class="row mb-3">
-        <div class="col-md-12 d-flex justify-content-end">
-          <button class="btn btn-danger" (click)="openModal()">Ajouter une voiture</button>
-        </div>
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-md-12 d-flex justify-content-end">
+        <button class="btn btn-danger" (click)="openModal()">Ajouter une voiture</button>
       </div>
-  
-      <!-- Table des voitures -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header card-header-danger">
-              <h4 class="card-title">Liste des Voitures</h4>
-              <p class="card-category">Liste des véhicules enregistrés</p>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead class="text-primary">
-                    <tr>
-                      <th>ID</th>
-                      <th>Marque</th>
-                      <th>Modèle</th>
-                      <th>Année</th>
-                      <th>Client</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let voiture of voitures">
-                      <td>{{ voiture.id }}</td>
-                      <td>{{ voiture.marque }}</td>
-                      <td>{{ voiture.modele }}</td>
-                      <td>{{ voiture.annee }}</td>
-                      <td>{{ voiture.client?.nom }} {{ voiture.client?.prenom }}</td>
-                      <td>
-                        <button class="edit-button mat-button" (click)="ouvrirModalModification(voiture)">
-                          <mat-icon>edit</mat-icon>
-                        </button>
-                        <button class="delete-button mat-button" (click)="supprimerVoiture(voiture.id)">
-                          <mat-icon>delete</mat-icon>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+    </div>
+
+    <!-- Table des voitures -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title">Liste des Voitures</h4>
+            <p class="card-category">Liste des véhicules enregistrés</p>
           </div>
-        </div>
-      </div>
-  
-      <!-- MODALE -->
-      <div class="modal" tabindex="-1" [ngClass]="{ 'd-block': showModal }" style="background: rgba(0, 0, 0, 0.5);">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-              <h5 class="modal-title">{{ voitureSelectionnee.id ? 'Modifier' : 'Ajouter' }} une Voiture</h5>
-              <button type="button" class="btn-close" (click)="fermerModal()"></button>
-            </div>
-            <div class="modal-body">
-              <form (ngSubmit)="soumettreVoiture()" #form="ngForm">
-                <div class="mb-3">
-                  <label>Marque</label>
-                  <input type="text" class="form-control" required [(ngModel)]="voitureSelectionnee.marque" name="marque">
-                </div>
-                <div class="mb-3">
-                  <label>Modèle</label>
-                  <input type="text" class="form-control" required [(ngModel)]="voitureSelectionnee.modele" name="modele">
-                </div>
-                <div class="mb-3">
-                  <label>Année</label>
-                  <input type="number" class="form-control" required [(ngModel)]="voitureSelectionnee.annee" name="annee" >
-                </div>
-                <div class="mb-3">
-                  <label>Client</label>
-                  <select class="form-control" required [(ngModel)]="voitureSelectionnee.client_id" name="client_id">
-                    <option *ngFor="let client of clients" [value]="client.id">
-                      {{ client.nom }} {{ client.prenom }}
-                    </option>
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-danger" [disabled]="form.invalid">
-                  {{ voitureSelectionnee.id ? 'Mettre à jour' : 'Ajouter' }}
-                </button>
-              </form>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="text-primary">
+                  <tr>
+                    <th>ID</th>
+                    <th>Marque</th>
+                    <th>Modèle</th>
+                    <th>Année</th>
+                    <th>Client</th>
+                    <th>Matricule</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let voiture of voitures">
+                    <td>{{ voiture.id }}</td>
+                    <td>{{ voiture.marque }}</td>
+                    <td>{{ voiture.modele }}</td>
+                    <td>{{ voiture.annee }}</td>
+                    <td>{{ voiture.client?.nom }} {{ voiture.client?.prenom }}</td>
+                    <td>{{ voiture.matricule }}</td>
+                   
+                    <td>
+                      <button class="edit-button mat-button" (click)="ouvrirModalModification(voiture)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button class="delete-button mat-button" (click)="supprimerVoiture(voiture.id)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- MODALE -->
+    <div class="modal" tabindex="-1" [ngClass]="{ 'd-block': showModal }" style="background: rgba(0, 0, 0, 0.5);">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">{{ voitureSelectionnee.id ? 'Modifier' : 'Ajouter' }} une Voiture</h5>
+            <button type="button" class="btn-close" (click)="fermerModal()"></button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="soumettreVoiture()" #form="ngForm">
+              <div class="mb-3">
+                <label>Marque</label>
+                <input type="text" class="form-control" required [(ngModel)]="voitureSelectionnee.marque" name="marque">
+              </div>
+              <div class="mb-3">
+                <label>Modèle</label>
+                <input type="text" class="form-control" required [(ngModel)]="voitureSelectionnee.modele" name="modele">
+              </div>
+              <div class="mb-3">
+                <label>Année</label>
+                <input type="number" class="form-control" required [(ngModel)]="voitureSelectionnee.annee" name="annee">
+              </div>
+              <div class="mb-3">
+                <label>Client</label>
+                <select class="form-control" required [(ngModel)]="voitureSelectionnee.client_id" name="client_id">
+                  <option *ngFor="let client of clients" [value]="client.id">
+                    {{ client.nom }} {{ client.prenom }}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label>Matricule</label>
+                <input type="text" class="form-control" required [(ngModel)]="voitureSelectionnee.matricule" name="matricule">
+              </div>
+              <!-- <div class="mb-3">
+                <label>Image</label>
+                <input type="file" class="form-control" (change)="onFileSelected($event)">
+              </div> -->
+              <!-- <div class="mb-3">
+                <label>Image</label>
+                <input type="file" class="form-control" (change)="onFileSelected($event)">
+              </div> -->
+              
+              <!-- <div *ngIf="previewUrl" class="mt-3">
+                <img [src]="previewUrl" alt="Preview" style="max-width: 100%; height: auto;">
+              </div> -->
+              <div class="mb-3">
+                <label>Image (URL)</label>
+                <input type="text" class="form-control" [(ngModel)]="voitureSelectionnee.img" placeholder="https://...">
+              </div>
+              
+              <div *ngIf="voitureSelectionnee.img" class="mt-3">
+                <img [src]="voitureSelectionnee.img" alt="Aperçu de l'image" style="max-width: 100%; height: auto;">
+              </div>
+              
+              
+              <button type="submit" class="btn btn-danger" [disabled]="form.invalid">
+                {{ voitureSelectionnee.id ? 'Mettre à jour' : 'Ajouter' }}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  
+</div>

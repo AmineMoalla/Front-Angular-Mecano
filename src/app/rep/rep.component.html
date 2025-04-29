@@ -1,0 +1,26 @@
+<section class="reparations-section">
+    <h2 class="section-title">Réparations pour la voiture {{ car.marque }} {{ car.modele }}</h2>
+  
+    <!-- Bouton pour revenir à la liste des voitures -->
+    <button (click)="goBack()" class="back-button">Retour</button>
+  
+    <!-- Affichage d'un message d'erreur -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  
+    <!-- Affichage des réparations -->
+    <div *ngIf="!errorMessage && reparations.length > 0" class="reparations-grid">
+      <div class="reparation-card" *ngFor="let reparation of reparations">
+        <h3>{{ reparation.titre }}</h3>
+        <p><strong>Date :</strong> {{ reparation.date }}</p>
+        <p><strong>Kilométrage :</strong> {{ reparation.km }}</p>
+        <p><strong>Coût :</strong> {{ reparation.cout }} €</p>
+      </div>
+    </div>
+  
+    <!-- Message si aucune réparation n'est trouvée -->
+    <div *ngIf="!errorMessage && reparations.length === 0" class="no-reparations-message">
+      Aucune réparation trouvée pour cette voiture.
+    </div>
+  </section>

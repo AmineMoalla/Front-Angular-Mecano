@@ -6,7 +6,27 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class VoitureService {
-  private apiUrl = 'http://localhost:8000/api/voitures';
+   private apiUrl = 'http://localhost:8000/api/voitures';
+  
+  // constructor(private http: HttpClient) {}
+
+  // getVoitures(): Observable<any[]> {
+  //   return this.http.get<any[]>(this.apiUrl);
+  // }
+
+  // ajouterVoiture(voiture: any): Observable<any> {
+  //   return this.http.post(this.apiUrl, voiture);
+  // }
+
+  // updateVoiture(id: number, voiture: any): Observable<any> {
+  //   return this.http.put(`${this.apiUrl}/${id}`, voiture);
+  // }
+
+  // supprimerVoiture(id: number): Observable<any> {
+  //   return this.http.delete(`${this.apiUrl}/${id}`);
+  // }
+
+
 
   constructor(private http: HttpClient) {}
 
@@ -14,15 +34,21 @@ export class VoitureService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
-  ajouterVoiture(voiture: any): Observable<any> {
-    return this.http.post(this.apiUrl, voiture);
+  ajouterVoitureAvecFormData(formData: FormData): Observable<any> {
+    return this.http.post(this.apiUrl, formData);
   }
 
-  updateVoiture(id: number, voiture: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, voiture);
+  updateVoitureAvecFormData(id: number, formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${id}?_method=PUT`, formData); // méthode spoofing PUT
   }
 
   supprimerVoiture(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  getVoituresByClientId(clientId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/client/${clientId}`);
+  }
+
+  
 }

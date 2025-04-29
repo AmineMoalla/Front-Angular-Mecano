@@ -47,4 +47,8 @@ export class ReparationService {
   getPieces(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:8000/api/pieces');
   }
+
+  getReparationsByCarId(carId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/car/${carId}`);
+  }
 }

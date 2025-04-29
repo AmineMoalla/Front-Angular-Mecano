@@ -6,7 +6,6 @@ export interface Piece {
   id?: number;
   nom: string;
   prix: number;
-  reparation_id?: number | null;
 }
 
 @Injectable({

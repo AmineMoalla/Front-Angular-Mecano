@@ -27,7 +27,7 @@ export class EmployeComponent implements OnInit {
   }
 
   ouvrirModalModification(employe: any) {
-    this.employeSelectionne = { ...employe }; // clone
+    this.employeSelectionne = { ...employe }; 
     this.showModal = true;
   }
 
@@ -37,11 +37,27 @@ export class EmployeComponent implements OnInit {
   }
 
   soumettreEmploye() {
-   
-      this.employeService.updateEmploye(this.employeSelectionne.id, this.employeSelectionne).subscribe(() => {
-        this.fermerModal();
-        this.chargerEmployes();
-      });
+    if (this.employeSelectionne.id) {
+      // Update existing
+      this.employeService.updateEmploye(this.employeSelectionne.id, this.employeSelectionne)
+        .subscribe({
+          next: () => {
+            this.fermerModal();
+            this.chargerEmployes();
+          },
+          error: (err) => console.error('Update failed', err)
+        });
+    } else {
+      // Create new
+      this.employeService.ajouterEmploye(this.employeSelectionne)
+        .subscribe({
+          next: () => {
+            this.fermerModal();
+            this.chargerEmployes();
+          },
+          error: (err) => console.error('Creation failed', err)
+        });
+    }
   }
 
   supprimerEmploye(id: number | undefined) {

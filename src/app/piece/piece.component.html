@@ -1,90 +1,110 @@
 <div class="main-content">
-    <div class="container-fluid">
-      <div class="row mb-3">
-        <div class="col-md-12 d-flex justify-content-end">
-          <button class="btn btn-danger" (click)="openModal()">Ajouter une pièce</button>
-        </div>
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-md-12 d-flex justify-content-end">
+        <button class="btn btn-danger" (click)="openModal()">
+          <mat-icon>add</mat-icon> Ajouter une pièce
+        </button>
       </div>
-      
+    </div>
 
-
-  
-      <!-- Table des pièces -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header card-header-danger">
-              <h4 class="card-title">Liste des Pièces</h4>
-              <p class="card-category">Voici la liste actuelle</p>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title">Liste des Pièces Détachées</h4>
+            <p class="card-category">Gestion des pièces détachées</p>
+          </div>
+          <div class="card-body">
+            <div *ngIf="isLoading" class="text-center">
+              <mat-spinner diameter="50"></mat-spinner>
             </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead class="text-primary">
-                    <tr>
-                      <th>ID</th>
-                      <th>Nom</th>
-                      <th>Prix</th>
-                      <th>Réparation ID</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let piece of pieces">
-                      <td>{{ piece.id }}</td>
-                      <td>{{ piece.nom }}</td>
-                      <td>{{ piece.prix | currency }}</td>
-                      <td>{{ piece.reparationId }}</td>
-                      <td>
-                        <!-- <button (click)="ouvrirModalModification(piece)">
-                          <i class="bi bi-pencil-square"></i>
-                        </button> -->
-
-                        <button class="edit-button mat-button" aria-label="Modifier">
-                          <mat-icon aria-hidden="false" fontIcon="edit" (click)="ouvrirModalModification(piece)"></mat-icon>
-                        </button>
-                        
-                        <button class="delete-button mat-button" aria-label="Supprimer" (click)="supprimerPiece(piece.id)">
-                          <mat-icon>delete</mat-icon>
-                        </button>
-                        
-                        
-                        
-                        <!-- <button class="btn btn-sm btn-danger" (click)="supprimerPiece(piece.id)">Supprimer</button> -->
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+            <div class="table-responsive" *ngIf="!isLoading">
+              <table class="table table-hover">
+                <thead class="text-primary">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let piece of pieces">
+                    <td>{{ piece.id }}</td>
+                    <td>{{ piece.nom }}</td>
+                    <td>{{ piece.prix | currency:'EUR':'symbol':'1.2-2' }}</td>
+                    <td>{{ piece.qtestock }}</td>
+                    <td>
+                      <button mat-icon-button color="primary" (click)="ouvrirModalModification(piece)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-icon-button color="warn" (click)="supprimerPiece(piece.id)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="pieces.length === 0" class="text-center py-4">
+                Aucune pièce détachée enregistrée
               </div>
             </div>
           </div>
         </div>
       </div>
-  
-      <!-- MODALE -->
-      <!-- MODALE -->
-<div class="modal" tabindex="-1" [ngClass]="{ 'd-block': showModal }" style="background: rgba(0, 0, 0, 0.5);">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title">{{ pieceSelectionnee?.id ? 'Modifier' : 'Ajouter' }} une Pièce</h5>
-        <button type="button" class="btn-close" (click)="fermerModal()"></button>
-      </div>
-      <div class="modal-body">
-        <form (ngSubmit)="soumettrePiece()" #form="ngForm">
-          <div class="mb-3">
-            <label>Nom</label>
-            <input type="text" class="form-control" required [(ngModel)]="pieceSelectionnee.nom" name="nom">
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">
+              {{ pieceSelectionnee.id ? 'Modifier' : 'Ajouter' }} une pièce détachée
+            </h5>
+            <button type="button" class="btn-close" (click)="fermerModal()"></button>
           </div>
-          <div class="mb-3">
-            <label>Prix</label>
-            <input type="number" class="form-control" required [(ngModel)]="pieceSelectionnee.prix" name="prix">
+          <div class="modal-body">
+            <form (ngSubmit)="soumettrePiece()" #pieceForm="ngForm">
+              <div class="mb-3">
+                <label class="form-label">Nom de la pièce</label>
+                <input type="text" class="form-control" 
+                       [(ngModel)]="pieceSelectionnee.nom" 
+                       name="nom" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Prix unitaire (€)</label>
+                <input type="number" step="0.01" class="form-control" 
+                       [(ngModel)]="pieceSelectionnee.prix" 
+                       name="prix" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Quantité en stock</label>
+                <input type="number" class="form-control" 
+                       [(ngModel)]="pieceSelectionnee.qtestock" 
+                       name="qtestock" required>
+              </div>
+              <!-- <div class="mb-3">
+                <label class="form-label">ID Réparation (optionnel)</label>
+                <input type="number" class="form-control" 
+                       [(ngModel)]="pieceSelectionnee.reparation_id" 
+                       name="reparation_id">
+              </div> -->
+              <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-secondary" (click)="fermerModal()">Annuler</button> -->
+                <button type="submit" class="btn btn-danger" [disabled]="pieceForm.invalid">
+                  {{ pieceSelectionnee.id ? 'Modifier' : 'Ajouter' }}
+                </button>
+              </div>
+            </form>
           </div>
-          <button type="submit" class="btn btn-danger" [disabled]="form.invalid">
-            {{ pieceSelectionnee?.id ? 'Modifier' : 'Ajouter' }}
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
 </div>
-

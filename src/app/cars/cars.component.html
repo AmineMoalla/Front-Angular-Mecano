@@ -1,0 +1,38 @@
+<header class="navbar" id="navbar">
+  <div class="navbar-container">
+    <a class="navbar-logo" routerLink="/">Mecano</a>
+    <nav class="navbar-links">
+      <a routerLink="/home" fragment="hero" class="navbar-link">Accueil</a>
+      <a routerLink="/home" fragment="services" class="navbar-link">Services</a>
+      <a routerLink="/home" fragment="about" class="navbar-link">À Propos</a>
+      <a routerLink="/home" fragment="contact" class="navbar-link">Contact</a>
+      <div class="profile-section">
+        <span class="profile-name">John Doe</span>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="cars-section">
+  <h2 class="section-title">Mes Voitures</h2>
+
+  <!-- Affichage d'un message d'erreur -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Affichage des voitures -->
+  <div *ngIf="!selectedCar && !errorMessage && cars.length > 0" class="cars-grid">
+    <div class="car-card" *ngFor="let car of cars" (click)="selectCar(car)">
+      <img [src]="car.img" [alt]="car.marque + ' ' + car.modele" class="car-image" />
+      <div class="car-details">
+        <h3>{{ car.marque }} {{ car.modele }}</h3>
+        <p><strong>Matricule :</strong> {{ car.matricule }}</p>
+        <p>{{ car.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Affichage du composant RepComponent pour la voiture sélectionnée -->
+  <app-rep *ngIf="selectedCar" [car]="selectedCar" (back)="clearSelection()"></app-rep>
+</section>
