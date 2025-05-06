@@ -17,7 +17,8 @@ import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { CarsComponent } from './cars/cars.component';
 import { RepComponent } from './rep/rep.component';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NgChartsModule } from 'ng2-charts';
 
 
 
@@ -31,6 +32,9 @@ import { RepComponent } from './rep/rep.component';
     RouterModule,
     AppRoutingModule,
     MatIconModule,
+    MatSnackBarModule,
+    NgChartsModule,
+    
  
 
   ],

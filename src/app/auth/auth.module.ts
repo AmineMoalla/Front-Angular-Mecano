@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card'; // Import MatCardModule
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -27,7 +28,9 @@ const routes: Routes = [
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatCardModule, // Ajouter MatCardModule ici
+    MatCardModule,
+    MatSnackBarModule, // Importer MatSnackBarModule ici
+
   ],
 })
 export class AuthModule {}

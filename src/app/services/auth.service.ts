@@ -21,4 +21,16 @@ export class AuthService {
     localStorage.removeItem('user');
     localStorage.removeItem('userId');
   }
+
+  isAuthenticated(): boolean {
+    // Vérifiez si l'utilisateur est connecté (par exemple, via un token dans le localStorage)
+    return !!localStorage.getItem('token');
+  }
+
+  getUserName(): string {
+    // Récupérez le nom de l'utilisateur (par exemple, depuis le localStorage ou un objet utilisateur)
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.name ;
+  }
+
 }

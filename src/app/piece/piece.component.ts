@@ -75,6 +75,7 @@ export class PieceComponent implements OnInit {
         next: () => {
           this.fermerModal();
           this.chargerPieces();
+          alert('Pièce modifiée avec succès !');
         },
         error: (err) => {
           this.errorMessage = 'Erreur lors de la modification';
@@ -86,6 +87,7 @@ export class PieceComponent implements OnInit {
         next: () => {
           this.fermerModal();
           this.chargerPieces();
+          alert('Pièce ajoutée avec succès !');
         },
         error: (err) => {
           this.errorMessage = 'Erreur lors de l\'ajout';
@@ -102,6 +104,7 @@ export class PieceComponent implements OnInit {
       this.pieceService.supprimerPiece(id).subscribe({
         next: () => {
           this.chargerPieces();
+          alert('Pièce supprimée avec succès !');
         },
         error: (err) => {
           this.errorMessage = 'Erreur lors de la suppression';

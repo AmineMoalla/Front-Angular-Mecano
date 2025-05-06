@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, #f3f4f6, #e5e7eb); /* Dégradé subtil */
+    background: #ffffff; /* Dégradé subtil */
   }
   
   .auth-card {
@@ -37,7 +37,7 @@
   }
   
   mat-icon {
-    color: #6a11cb; /* Couleur des icônes */
+    color: #1152cb; /* Couleur des icônes */
   }
   
   .full-width {
@@ -46,19 +46,19 @@
   
   button {
     margin-top: 20px;
-    background: linear-gradient(135deg, #2575fc, #6a11cb); /* Dégradé pour le bouton */
+    background: #1152cb; /* Dégradé pour le bouton */
     color: white;
     font-weight: bold;
   }
   
   button:hover {
-    background: linear-gradient(135deg, #6a11cb, #2575fc); /* Inversion du dégradé au survol */
+    background: #1152cb; /* Inversion du dégradé au survol */
   }
   
   .register-link {
     display: block;
     margin-top: 10px;
-    color: #2575fc;
+    color: #1152cb;
     text-decoration: none;
     font-weight: bold;
   }

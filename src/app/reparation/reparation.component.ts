@@ -104,6 +104,7 @@ export class ReparationComponent implements OnInit {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette réparation ?')) {
       this.reparationService.deleteReparation(id).subscribe(() => {
         this.getReparations();
+        alert('Réparation supprimée avec succès !');
       });
     }
   }

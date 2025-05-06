@@ -178,3 +178,41 @@
     grid-template-columns: 1fr;
   }
 }
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1b2a4e;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.user-profile mat-icon {
+  font-size: 1.5rem;
+  color: #3e7cb1;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #1b2a4e;
+  font-size: 1.5rem;
+}
+
+.logout-button mat-icon {
+  font-size: 1.5rem;
+  color: #e53935; /* Rouge pour indiquer la déconnexion */
+}
+
+.logout-button:hover mat-icon {
+  color: #b71c1c; /* Rouge plus foncé au survol */
+}

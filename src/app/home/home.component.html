@@ -6,9 +6,25 @@
       <a routerLink="/home" fragment="services" class="navbar-link">Services</a>
       <a routerLink="/home" fragment="about" class="navbar-link">À Propos</a>
       <a routerLink="/home" fragment="contact" class="navbar-link">Contact</a>
-      <a routerLink="/auth/login" class="navbar-link">Se connecter</a>
-      <a routerLink="/dashboard" class="navbar-link">dashboard</a>
+      
+      <!-- Si l'utilisateur est connecté -->
+      <div *ngIf="isLoggedIn; else loginLink" class="user-actions">
+        <a routerLink="/cars" class="navbar-link">Mes Voitures</a>
 
+        <a routerLink="/profile" class="navbar-link user-profile">
+          
+          
+          {{ userName }}
+        </a>
+        <button class="logout-button" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+
+      <!-- Si l'utilisateur n'est pas connecté -->
+      <ng-template #loginLink>
+        <a routerLink="/auth/login" class="navbar-link">Se connecter</a>
+      </ng-template>
     </nav>
   </div>
 </header>
@@ -22,9 +38,6 @@
       <button mat-raised-button color="primary" routerLink="/auth/login" class="cta-button">
         Se connecter
       </button>
-      <!-- <button mat-raised-button color="accent" routerLink="/services" class="cta-button">
-        Explorer les services
-      </button> -->
       <button mat-raised-button routerLink="/services" class="cta-button red-button">
         Explorer les services
       </button>

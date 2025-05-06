@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as Chartist from 'chartist';
+import { EmployeService } from 'app/services/employe.service';
+import { ReparationService } from 'app/services/reparation.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,144 +8,72 @@ import * as Chartist from 'chartist';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  public pieChartData: { nom: string; nb_reparations: number; color: string; percentage: number }[] = [];
+  public pieChartBackground: string = '';
 
-  constructor() { }
-  startAnimationForLineChart(chart){
-      let seq: any, delays: any, durations: any;
-      seq = 0;
-      delays = 80;
-      durations = 500;
+  constructor(
+    private employeService: EmployeService,
+    private reparationService: ReparationService
+  ) {}
 
-      chart.on('draw', function(data) {
-        if(data.type === 'line' || data.type === 'area') {
-          data.element.animate({
-            d: {
-              begin: 600,
-              dur: 700,
-              from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-              to: data.path.clone().stringify(),
-              easing: Chartist.Svg.Easing.easeOutQuint
-            }
-          });
-        } else if(data.type === 'point') {
-              seq++;
-              data.element.animate({
-                opacity: {
-                  begin: seq * delays,
-                  dur: durations,
-                  from: 0,
-                  to: 1,
-                  easing: 'ease'
-                }
-              });
-          }
-      });
-
-      seq = 0;
-  };
-  startAnimationForBarChart(chart){
-      let seq2: any, delays2: any, durations2: any;
-
-      seq2 = 0;
-      delays2 = 80;
-      durations2 = 500;
-      chart.on('draw', function(data) {
-        if(data.type === 'bar'){
-            seq2++;
-            data.element.animate({
-              opacity: {
-                begin: seq2 * delays2,
-                dur: durations2,
-                from: 0,
-                to: 1,
-                easing: 'ease'
-              }
-            });
-        }
-      });
-
-      seq2 = 0;
-  };
-  ngOnInit() {
-      /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
-
-      const dataDailySalesChart: any = {
-          labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-          series: [
-              [12, 17, 7, 17, 23, 18, 38]
-          ]
-      };
-
-     const optionsDailySalesChart: any = {
-          lineSmooth: Chartist.Interpolation.cardinal({
-              tension: 0
-          }),
-          low: 0,
-          high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: { top: 0, right: 0, bottom: 0, left: 0},
-      }
-
-      var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
-
-      this.startAnimationForLineChart(dailySalesChart);
-
-
-      /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
-
-      const dataCompletedTasksChart: any = {
-          labels: ['12p', '3p', '6p', '9p', '12p', '3a', '6a', '9a'],
-          series: [
-              [230, 750, 450, 300, 280, 240, 200, 190]
-          ]
-      };
-
-     const optionsCompletedTasksChart: any = {
-          lineSmooth: Chartist.Interpolation.cardinal({
-              tension: 0
-          }),
-          low: 0,
-          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: { top: 0, right: 0, bottom: 0, left: 0}
-      }
-
-      var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
-
-      // start animation for the Completed Tasks Chart - Line Chart
-      this.startAnimationForLineChart(completedTasksChart);
-
-
-
-      /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
-
-      var datawebsiteViewsChart = {
-        labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-        series: [
-          [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-
-        ]
-      };
-      var optionswebsiteViewsChart = {
-          axisX: {
-              showGrid: false
-          },
-          low: 0,
-          high: 1000,
-          chartPadding: { top: 0, right: 5, bottom: 0, left: 0}
-      };
-      var responsiveOptions: any[] = [
-        ['screen and (max-width: 640px)', {
-          seriesBarDistance: 5,
-          axisX: {
-            labelInterpolationFnc: function (value) {
-              return value[0];
-            }
-          }
-        }]
-      ];
-      var websiteViewsChart = new Chartist.Bar('#websiteViewsChart', datawebsiteViewsChart, optionswebsiteViewsChart, responsiveOptions);
-
-      //start animation for the Emails Subscription Chart
-      this.startAnimationForBarChart(websiteViewsChart);
+  ngOnInit(): void {
+    this.loadData();
   }
 
+  loadData(): void {
+    this.employeService.getEmployes().subscribe(employes => {
+      this.reparationService.getAllReparations().subscribe(reparations => {
+        const employeMap = new Map<number, { nom: string; nb_reparations: number }>();
+
+        // Initialiser le compteur de réparations pour chaque employé
+        for (let emp of employes) {
+          employeMap.set(emp.id, { nom: emp.nom, nb_reparations: 0 });
+        }
+
+        // Compter les réparations
+        for (let rep of reparations) {
+          const id = rep.technicien_id;
+          if (id && employeMap.has(id)) {
+            employeMap.get(id)!.nb_reparations++;
+          }
+        }
+
+        // Garder uniquement ceux avec réparations > 0
+        const topEmployes = Array.from(employeMap.values())
+          .filter(emp => emp.nb_reparations > 0)
+          .sort((a, b) => b.nb_reparations - a.nb_reparations)
+          .slice(0, 3); // Tu peux augmenter ce nombre si tu veux plus
+
+        const totalRep = topEmployes.reduce((sum, emp) => sum + emp.nb_reparations, 0);
+
+        this.pieChartData = topEmployes.map((emp, index) => {
+          const percentage = (emp.nb_reparations / totalRep) * 100;
+          const color = this.getColorForIndex(index);
+          return { ...emp, color, percentage };
+        });
+
+        // Générer le conic-gradient
+        let gradient = '';
+        let startAngle = 0;
+        for (let emp of this.pieChartData) {
+          const endAngle = startAngle + emp.percentage;
+          gradient += `${emp.color} ${startAngle}% ${endAngle}%, `;
+          startAngle = endAngle;
+        }
+        this.pieChartBackground = `conic-gradient(${gradient.slice(0, -2)})`;
+      });
+    });
+  }
+
+  getColorForIndex(index: number): string {
+    const colors = [
+      '#FFCDD2', 
+      '#EF5350', 
+      '#F44336', 
+      '#D32F2F', 
+      '#B71C1C'  
+    ];
+    
+    return colors[index % colors.length];
+  }
 }

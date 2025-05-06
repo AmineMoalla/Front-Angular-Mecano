@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { forkJoin, map, Observable } from 'rxjs';
+import { ReparationService } from './reparation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class VoitureService {
 
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private repser:ReparationService) {}
 
   getVoitures(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
@@ -49,6 +50,25 @@ export class VoitureService {
   getVoituresByClientId(clientId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/client/${clientId}`);
   }
+  getVoituresWithReparations(): Observable<any[]> {
+    return forkJoin({
+      voitures: this.http.get<any[]>(this.apiUrl),
+      reparations: this.repser.getAllReparations()
+    }).pipe(
+      map(({voitures, reparations}) => {
+        // Compter les réparations par voiture
+        const reparationsCount = reparations.reduce((acc, reparation) => {
+          acc[reparation.voiture_id] = (acc[reparation.voiture_id] || 0) + 1;
+          return acc;
+        }, {});
 
+        // Fusionner avec les données des voitures
+        return voitures.map(voiture => ({
+          ...voiture,
+          reparationsCount: reparationsCount[voiture.id] || 0
+        }));
+      })
+    );
+  }
   
 }

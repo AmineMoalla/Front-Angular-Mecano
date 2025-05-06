@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -7,17 +8,32 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  isLoggedIn: boolean = false;
+  userName: string = '';
+
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.route.fragment.subscribe((fragment) => {
-      if (fragment) {
-        const element = document.getElementById(fragment);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }
-    });
+    // Vérifiez si l'utilisateur est connecté
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    this.isLoggedIn = !!token;
+
+    if (this.isLoggedIn && user) {
+      this.userName = JSON.parse(user).prenom; // Récupérez le prénom de l'utilisateur
+    }
+  }
+
+  logout(): void {
+    // Supprimez les données de l'utilisateur du localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userId');
+
+    // Redirigez vers la page de connexion
+    this.isLoggedIn = false;
+    this.userName = '';
+    this.router.navigate(['/auth/login']);
   }
 
   @HostListener('window:scroll', [])

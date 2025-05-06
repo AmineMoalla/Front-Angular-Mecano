@@ -149,11 +149,13 @@ export class VoitureComponent implements OnInit {
       this.voitureService.updateVoitureAvecFormData(this.voitureSelectionnee.id, this.voitureSelectionnee).subscribe(() => {
         this.fermerModal();
         this.chargerVoitures();
+        alert('Voiture mise à jour avec succès !');
       });
     } else {
       this.voitureService.ajouterVoitureAvecFormData(this.voitureSelectionnee).subscribe(() => {
         this.fermerModal();
         this.chargerVoitures();
+        alert('Voiture ajoutée avec succès !');
       });
     }
   }
@@ -162,6 +164,7 @@ export class VoitureComponent implements OnInit {
     if (!id) return;
     if (confirm('Confirmer la suppression de cette voiture ?')) {
       this.voitureService.supprimerVoiture(id).subscribe(() => this.chargerVoitures());
+      alert('Voiture supprimée avec succès !');
     }
   }
 }

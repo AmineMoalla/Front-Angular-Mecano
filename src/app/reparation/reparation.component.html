@@ -11,6 +11,7 @@
         <div class="card">
           <div class="card-header card-header-danger">
             <h4 class="card-title">Liste des Réparations</h4>
+            <p class="card-category">Voici la liste actuelle </p>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -42,9 +43,9 @@
                       <span *ngIf="!rep.pieces || rep.pieces.length === 0">Aucune pièce</span>
                     </td>
                     <td>
-                      <button class="edit-button mat-button" aria-label="Modifier" (click)="ouvrirModalModification(rep)">
+                      <!-- <button class="edit-button mat-button" aria-label="Modifier" (click)="ouvrirModalModification(rep)">
                         <mat-icon fontIcon="edit"></mat-icon>
-                      </button>
+                      </button> -->
                       <button class="delete-button mat-button" aria-label="Supprimer" (click)="supprimerReparation(rep.id)">
                         <mat-icon>delete</mat-icon>
                       </button>

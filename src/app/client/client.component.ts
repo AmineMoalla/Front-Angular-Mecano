@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from 'app/services/client.service';
+import { AuthService } from 'app/services/auth.service'; // Importer AuthService pour vérifier le rôle de l'utilisateur
 
 @Component({
   selector: 'app-client',
@@ -10,11 +11,14 @@ export class ClientComponent implements OnInit {
   clients: any[] = [];
   showModal = false;
   clientSelectionne: any = { nom: '', prenom: '', email: '' };
+  isAdmin: boolean = false; // Variable pour vérifier si l'utilisateur est un admin
 
-  constructor(private clientService: ClientService) {}
+  constructor(private clientService: ClientService, private authService: AuthService) {}
 
   ngOnInit() {
-    this.chargerClients();
+   this.chargerClients();
+  
+  
   }
 
   chargerClients() {
